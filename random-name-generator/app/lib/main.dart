@@ -180,21 +180,35 @@ class FavoritePage extends StatelessWidget {
       return const Center(
           child: Text('You have not added anything in favorite'));
     }
-    return Center(
-      child: ListView(
-        padding: const EdgeInsets.only(left: 200, top: 50),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text('Your have ${appState.favorite.length} favorites'),
+    return LayoutBuilder(builder: (context, constraints) {
+      return FavoriteList(appState: appState);
+    });
+  }
+}
+
+class FavoriteList extends StatelessWidget {
+  const FavoriteList({
+    super.key,
+    required this.appState,
+  });
+
+  final MyAppState appState;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text('Your have ${appState.favorite.length} favorites'),
+        ),
+        for (var word in appState.favorite)
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            title: Text(word.asPascalCase),
           ),
-          for (var word in appState.favorite)
-            ListTile(
-              leading: const Icon(Icons.favorite),
-              title: Text(word.asPascalCase),
-            ),
-        ],
-      ),
+      ],
     );
   }
 }
